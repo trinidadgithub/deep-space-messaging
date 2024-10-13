@@ -36,6 +36,8 @@ The Range Check Protocol and Light Burst Broadcast System are critical component
 
 
 As space missions demand higher data rates, greater reliability, and efficient power usage, laser-based communication has emerged as the preferred technology. Traditional radio wave communication is now considered obsolete for long-distance interplanetary communication due to its limitations in bandwidth, interference management, and power efficiency.
+
+## Range Check Protocol
 ### Objective
 
 The Range Check Protocol ensures that:
@@ -47,39 +49,61 @@ The Range Check Protocol ensures that:
 
 Steps of the Range Check Protocol
 
-    Node Discovery and Initialization:
-        Nodes broadcast their position, velocity, and status periodically.
-        Each node uses this data to determine whether communication is possible.
+1. Node Discovery and Initialization:
+- Nodes broadcast their position, velocity, and status periodically.
+- Each node uses this data to determine whether communication is possible.
+  - Calculate Distance Between Nodes:
 
-    Calculate Distance Between Nodes:
+      The distance between two nodes is calculated using the **Euclidean formula**:
 
-        The distance between two nodes is calculated using the Euclidean formula:
-The distance between two nodes is calculated using the **Euclidean formula**:
+        distance = sqrt((x2 - x1)^2 + (y2 - y1)^2 + (z2 - z1)^2)
 
-\[
-\text{distance} = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2 + (z_2 - z_1)^2}
-\]
-
-
-Line-of-Sight (LOS) Check:
+2. Line-of-Sight (LOS) Check:
 
     Ensures that no obstacles (e.g., other objects or terrain) block the communication path between nodes.
 
-Align Laser Transmitters:
+3. Align Laser Transmitters:
 
     The node calculates the angle required to align the laser transmitter with the receiver.
     Laser alignment ensures focused signal transmission to the target.
 
-Verify Communication Range:
+4. Verify Communication Range:
 
     If the calculated distance is within range, the message is sent; otherwise, it is queued for later transmission.
 
-Store-and-Forward Mechanism:
+5. Store-and-Forward Mechanism:
 
     If the target node is out of range, the message is stored locally and retried when the node comes back within range.
 
-Periodic Retries:
+6. Periodic Retries:
 
     Nodes retry communication at defined intervals if the target node is out of range or the initial transmission fails.
 
-\\(\mathbf{I}\_n\\)
+## Light Burst Broadcast System
+### Objective
+
+The Light Burst Broadcast System allows nodes to periodically broadcast their position, velocity, and status in all directions. Any node within listening range stores this data locally for future communication attempts.
+
+How It Works:
+
+1. **Light Burst Emission**:
+        Each node emits a light burst containing:
+            Position (x, y, z)
+            Velocity (vx, vy, vz)
+            Node name/ID
+            Timestamp of the burst
+
+2. **Reception and Local Storage**:
+        Any node within range receives the burst and stores the data locally.
+
+3. **Using Stored Data for Communication**:
+        When a node wants to communicate, it uses the stored burst data to predict the current position of the target node.
+
+4. **Handling Intermittent Bursts**:
+        If bursts are missed or not received within a specified interval, the node assumes:
+            The target node is out of range.
+            There is obstruction or failure.
+        The node retries communication periodically based on the predicted trajectory of the target node.
+
+5. **Laser Alignment Based on Stored Data**:
+        Before sending a message, the node aligns its laser transmitter based on the last known position from the stored burst data.
