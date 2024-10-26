@@ -10,7 +10,7 @@ Reimagining communication across the stars with autonomous, delay-tolerant syste
 ### [dtn-messaging-system](./dtn-messaging-system) (In progress)
 *Core implementation of delay-tolerant networking (DTN), allowing messages to be reliably sent and received across vast distances and through intermittent connectivity, ensuring communication continuity even during disruptions.*
 
-### [astro-messaging-system](./astro-messaging-system) (TODO)
+### [astro-messaging-system](./astro-messaging-system) (In progress)
 *A system crafted specifically for the extreme conditions of space exploration, where temperature extremes, cosmic radiation, and vast distances challenge traditional communication methods. This messaging system is designed to maintain signal integrity and reliability in the harshest space environments.*
 
 ### [space-relay-comm](./space-relay-comm) (TODO)
