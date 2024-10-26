@@ -49,7 +49,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 1. Ensure all changes adhere to the project's style and guidelines.
 
 2. Run tests to make sure your changes don't break anything:
-   npm run test
+   TBD
 
 3. Submit a pull request to the `main` branch of the repository.
 ```
