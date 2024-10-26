@@ -7,7 +7,7 @@ Reimagining communication across the stars with autonomous, delay-tolerant syste
 ### [interplanetary-comm-protocols](./interplanetary-comm-protocols)  (In progress)
 *Protocols designed to enable seamless and reliable communication between planets, spacecraft, and mission control on Earth, tackling the extreme distances, delays, and limitations inherent in interplanetary communication.*
 
-### [dtn-messaging-system](./dtn-messaging-system) (TODO)
+### [dtn-messaging-system](./dtn-messaging-system) (In progress)
 *Core implementation of delay-tolerant networking (DTN), allowing messages to be reliably sent and received across vast distances and through intermittent connectivity, ensuring communication continuity even during disruptions.*
 
 ### [astro-messaging-system](./astro-messaging-system) (TODO)
