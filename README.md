@@ -13,7 +13,7 @@ Reimagining communication across the stars with autonomous, delay-tolerant syste
 ### [astro-messaging-system](./astro-messaging-system) (In progress)
 *A system crafted specifically for the extreme conditions of space exploration, where temperature extremes, cosmic radiation, and vast distances challenge traditional communication methods. This messaging system is designed to maintain signal integrity and reliability in the harshest space environments.*
 
-### [space-relay-comm](./space-relay-comm) (TODO)
+### [space-relay-comm](./space-relay-comm) (In progress)
 *A network of autonomous relay nodes (e.g., spacecraft, satellites) that ensure message forwarding across great distances. Each node acts as an intelligent router, optimizing message delivery by dynamically adjusting routes based on availability and proximity of other nodes.*
 
 ### [autonomous-space-comms](./autonomous-space-comms) (TODO)
