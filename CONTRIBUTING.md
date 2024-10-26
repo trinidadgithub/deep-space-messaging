@@ -21,7 +21,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 1. Fork the repository to your own GitHub account.
 
 2. Clone the repository to your local machine.
-   git clone https://github.com/your-username/fullstack-web-app.git
+   git clone https://github.com/trinidadgithub/deep-space-messaging.git
 
 3. Create a new branch for your feature or fix:
    git checkout -b your-branch-name
@@ -40,15 +40,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 ```
 
 1. Ensure that you have the following tools installed:
-   - Node.js
-   - Docker
-   - PostgreSQL
-
-2. Install project dependencies:
-   npm install
-
-3. Run tests to verify your setup:
-   npm run test
+   - python
 ```
 ## Submitting Changes
 
