@@ -2,7 +2,7 @@ The DTN Prototype demonstrates Delay-Tolerant Networking (DTN) principles in act
 
 The Delay-Tolerant Networking (DTN) Messaging System is a specialized communication protocol designed to handle the unique challenges of space and deep-space communication, where long delays, intermittent connectivity, and disrupted paths are the norms. Let’s go over the details and practical considerations involved in designing a DTN messaging system for deep space.
 
-CREDIT:  Giving credit to foundational ideas and prior research is essential, especially in fields like DTN and space communication, where the work of innovators at NASA, the IRTF, and beyond has laid the groundwork for advanced space networking concepts. By acknowledging these contributions, we here greatly appreciate the hard work and contributions of these thought leaders to provide the foundation for this work and offer our deepest respect the original thinkers for enhance the credibility of our own work by connecting it to a robust scientific foundation.  We here are forever in your debt.
+CREDIT:  Giving credit to foundational ideas and prior research is essential, especially in fields like DTN and space communication, where the work of innovators at NASA, the IRTF, and beyond has laid the groundwork for advanced space networking concepts. By acknowledging these contributions, we here greatly appreciate the hard work and contributions of these thought leaders to provide the foundation for this work and offer our deepest respect to the original thinkers for the enhanced credibility of our own work by connecting it to a robust scientific foundation.  We here are forever in your debt.
 
 Key Concepts in DTN
 
