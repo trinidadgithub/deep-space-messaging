@@ -130,3 +130,6 @@ Science and Technology.
 * "The design of the Delay-Tolerant Networking (DTN) system draws heavily on research and protocol specifications from the DTN Research Group (DTNRG), as well as practical implementations by NASA and foundational work on the Bundle Protocol (RFC 5050)."
 * "The DTN-based system presented here also implements concepts from the Licklider Transmission Protocol (LTP) for reliable data transmission in high-latency environments, following standards set forth in RFC 5326."
 * "Routing methods such as Contact Graph Routing (CGR), developed by Scott Burleigh and colleagues at NASA, inform the DTN system’s scheduling and path optimization, using predictable orbital paths for message forwarding."
+
+### Running a simulation
+The src directory contains simulations.  See "docs.md" on how to run them.
