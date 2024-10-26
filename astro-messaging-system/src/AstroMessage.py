@@ -25,6 +25,10 @@ Methods:
                                   checksum to determine if data corruption has occurred.
 """
 
+# TODO: Implement message prioritization
+# TODO: Implement Power-Saving modes
+# TODO: Implement message event queue management algorithms
+
 class AstroMessage:
     def __init__(self, data, priority=1):
         self.data = data
