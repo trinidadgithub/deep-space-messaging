@@ -94,40 +94,38 @@ Implementing a DTN Prototype
 
 Key References for DTN and Related Protocols
 
-    Delay-Tolerant Networking Research Group (DTNRG):
+* Delay-Tolerant Networking Research Group (DTNRG):
         The DTN Research Group (DTNRG), part of the Internet Research Task Force (IRTF), conducted pioneering work on DTN, defining core protocols, including the Bundle Protocol (BP).
-        Reference:
-            DTN Research Group. https://datatracker.ietf.org/rg/dtnrg/charter/
+        Reference: [DTN Research Group](https://datatracker.ietf.org/rg/dtnrg/charter/)
 
-    Bundle Protocol (BP) Specification:
+* Bundle Protocol (BP) Specification:
         The Bundle Protocol is the heart of DTN, providing a standard for encapsulating and routing messages across networks with intermittent connectivity. It includes custody transfer, which allows nodes to take responsibility for bundles in case of network disruption.
-        Reference:
-            Scott Burleigh, Kevin Fall, and Edward Cerf. Bundle Protocol Specification (RFC 5050). https://datatracker.ietf.org/doc/rfc5050/
+        Reference: [Scott Burleigh, Kevin Fall, and Edward Cerf. Bundle Protocol Specification (RFC 5050).](https://datatracker.ietf.org/doc/rfc5050/)
 
-    NASA's Implementation of DTN for Space Communications:
+* NASA's Implementation of DTN for Space Communications:
         NASA has adopted DTN protocols for space missions to handle delays and disconnections in communication. The Disruption Tolerant Networking Program within NASA focuses on DTN applications for space exploration.
-        Reference:
-            NASA’s Disruption Tolerant Networking. https://www.nasa.gov/directorates/heo/scan/engineering/technology/dtn
+        Reference: [NASA’s Disruption Tolerant Networking.](https://www.nasa.gov/directorates/heo/scan/engineering/technology/dtn)
 
-    Licklider Transmission Protocol (LTP):
+* Licklider Transmission Protocol (LTP):
         Licklider Transmission Protocol (LTP) is often used in space-based DTN systems for efficient data transmission over long delays and high-error environments. Named after J.C.R. Licklider, an internet pioneer, LTP is optimized for deep-space links.
-        Reference:
-            Michael Ramadas, Scott Burleigh, and Sven-Joachim Klop. Licklider Transmission Protocol - Motivation (RFC 5326). https://datatracker.ietf.org/doc/rfc5326/
+        Reference: [Michael Ramadas, Scott Burleigh, and Sven-Joachim Klop. Licklider Transmission Protocol - Motivation (RFC 5326).](https://datatracker.ietf.org/doc/rfc5326/)
 
-    Contact Graph Routing (CGR):
+* Contact Graph Routing (CGR):
         CGR is an advanced routing method for DTN that uses scheduled contact plans (e.g., orbital alignments) to find optimal routes in space-based DTN networks.
-        Reference:
-            Scott Burleigh, et al. Contact Graph Routing (CGR). Proceedings of the 2011 IEEE Aerospace Conference. https://ieeexplore.ieee.org/document/5747552
+        Reference: [Scott Burleigh, et al. Contact Graph Routing (CGR). Proceedings of the 2011 IEEE Aerospace Conference.](https://ieeexplore.ieee.org/document/5747552)
 
-    Interplanetary Internet Project:
+* Interplanetary Internet Project:
         Pioneered by Vinton Cerf, one of the "fathers of the internet," this project aimed to develop protocols like DTN to create an Interplanetary Internet that could enable communication across the solar system.
-        Reference:
-            Vinton G. Cerf, Scott Burleigh, et al. Interplanetary Internet Architecture. https://ieeexplore.ieee.org/document/1035044
+        Reference: [Vinton G. Cerf, Scott Burleigh, et al. Interplanetary Internet Architecture.](https://ieeexplore.ieee.org/document/1035044)
 
-    Practical Applications and Case Studies:
-        Various studies and case applications, such as those by NASA's Jet Propulsion Laboratory (JPL), illustrate the real-world use of DTN in space missions, including lunar, Mars, and asteroid exploration.
-        Reference:
-            Scott Burleigh, Disruption Tolerant Networking for NASA’s Space and Ground Communications Infrastructure, IEEE Global Communications Conference (GLOBECOM), 2015.
+* Practical Applications and Case Studies:
+  1. "Overview of JPL in Disruption-Tolerant Networking" - This document from NASA's Technical Reports Server (NTRS) provides an overview of JPL's work on DTN, focusing on the DTN's application in space communications. The report details foundational principles of DTN, such as its ability to handle disruptions and latency, which are essential for interplanetary communication networks. It also outlines JPL's contributions to the Interplanetary Overlay Network (ION), a software suite implementing DTN protocols for space applications. Available at: [NASA NTRS](https://ntrs.nasa.gov/citations/20130009278)
+NASA Technical Reports Server
+  2. Development of DTN Nodes Using AI for Autonomous Management - This project from JPL aimed to apply artificial intelligence to manage DTN nodes autonomously in cis-lunar network scenarios. The study, published on NASA's Science and Technology site, describes DTN's capabilities and ongoing efforts to optimize DTN performance in real-time, reducing the need for manual monitoring and enhancing space mission autonomy. More on this can be found at [NASA's Science and Technology website](https://scienceandtechnology.jpl.nasa.gov/sites/default/files/documents/presentations/pdfs/2021/SP20031p.pdf)
+Science and Technology.
+.
+
+### Addtional Attributions ###
 
 * "The design of the Delay-Tolerant Networking (DTN) system draws heavily on research and protocol specifications from the DTN Research Group (DTNRG), as well as practical implementations by NASA and foundational work on the Bundle Protocol (RFC 5050)."
 * "The DTN-based system presented here also implements concepts from the Licklider Transmission Protocol (LTP) for reliable data transmission in high-latency environments, following standards set forth in RFC 5326."
