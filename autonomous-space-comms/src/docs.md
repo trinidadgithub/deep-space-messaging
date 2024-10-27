@@ -93,6 +93,30 @@ docker run --rm -v log_volume:/data alpine ls /data
 
 With this setup, each message interaction is logged with details on routes, message success, and retries. This data can later be processed to train a model for route optimization based on observed performance, helping predict the best paths and times for future transmissions.
 
+## Enhancements and Future Suggestions
+
+1. Advanced Routing Algorithm:  
+   - Replace random message forwarding with a smart routing algorithm that selects the best neighbor based on latency, availability, and proximity.
+   - Implement machine learning-based predictions for optimal routes based on historical data.
+
+2. Enhanced Retry and Timeout Mechanisms:
+   - Add exponential backoff for retry intervals to manage bandwidth and reduce congestion.
+   - Include a message expiry mechanism where old messages are discarded if they exceed a maximum wait time.
+
+3. Power and Resource Management Simulation:
+    - Implement power constraints for each node, adjusting message forwarding based on available energy levels.
+    - Introduce resource checks to prioritize messages when storage or bandwidth is limited.
+
+4. Self-Monitoring and Health Reporting:
+    - Allow nodes to monitor their own health (e.g., connection status, error rates) and report issues.
+    - Enable neighboring nodes to adjust their routing if a node reports connectivity or processing issues.
+
+5. Centralized Monitoring and Visualization:
+    - Add support for sending logs to a centralized monitoring system, enabling real-time visualization of node activities, message flows, and network health.
+    - Integrate with tools like Grafana or Prometheus for advanced data analysis.
+
+These future improvements will help simulate an even more realistic, autonomous space communication network, especially beneficial for scalability and predictive analysis. 
+
 
 
 
