@@ -1,3 +1,5 @@
+# Implementation of autonomous space communication prototype
+
 In this directory is a prototype for our autonomous space communication system using Python with threading and Docker. Each node will act as a separate Docker container, sending and receiving messages randomly across a network. Here’s the plan:
 
 **Python Node Prototype:** Each node will be a Python script representing a node with autonomous behavior.
