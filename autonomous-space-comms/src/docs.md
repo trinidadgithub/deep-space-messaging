@@ -8,7 +8,7 @@ In this directory is a prototype for our autonomous space communication system u
 
 **Message Simulation:** Each node will send random messages to other nodes, implementing a store-and-forward model with retries.
 
-**Centralized Communication Logs:** Implement a centralized logger to store log events.  These events will be used to train a machine learning algorithms to learn the best routes for communication.
+**Centralized Communication Logs:** Implement a centralized logger to store log events.  These events will be used to train machine learning algorithms to learn the best routes for communication.
 
 ### Node Chatter
 
