@@ -13,8 +13,6 @@ services:
       - NEIGHBOR2_PORT=5002
     ports:
       - "5000:5000"
-    volumes:
-      - log_volume:/app/logs
     networks:
       skynet:
         aliases:
@@ -32,8 +30,6 @@ services:
       - NEIGHBOR2_PORT=5002
     ports:
       - "5001:5001"
-    volumes:
-      - log_volume:/app/logs
     networks:
       skynet:
         aliases:
@@ -51,8 +47,6 @@ services:
       - NEIGHBOR2_PORT=5001
     ports:
       - "5002:5002"
-    volumes:
-      - log_volume:/app/logs
     networks:
       skynet:
         aliases:
@@ -62,5 +56,3 @@ networks:
   skynet:
     driver: bridge
 
-volumes:
-  log_volume:

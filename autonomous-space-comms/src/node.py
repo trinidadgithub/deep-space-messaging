@@ -5,11 +5,10 @@ import socket
 import json
 import logging
 import os
+import uuid
 
 # Configure centralized logging to capture all events in a shared log file
 logging.basicConfig(
-    filename="/app/logs/communication.log",  # Path to Docker-mounted volume for logs
-    filemode="a",
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
 )
@@ -36,18 +35,19 @@ class SpaceRelayMessage:
         retries (int): Count of retry attempts due to failed transmissions.
         max_retries (int): Maximum allowed retries before discarding the message.
     """
-    def __init__(self, data, priority=1):
-        logging.info("Function init of SpaceRelayMessage started")
+    def __init__(self, data, priority=1, sender=None, message_id=None):
         self.data = data
         self.priority = priority
         self.transmitted = False
         self.retries = 0
         self.max_retries = 3
+        self.id = message_id if message_id else str(uuid.uuid4())
+        self.sender = sender
 
     def to_dict(self):
         """Converts the message attributes to a dictionary for easy JSON serialization."""
-        logging.info("Function to_dict started")
         return {
+            "id": self.id,
             "data": self.data,
             "priority": self.priority,
             "transmitted": self.transmitted,
@@ -67,10 +67,9 @@ class RelayNode(threading.Thread):
     """
     def __init__(self, name, port, neighbors):
         super().__init__()
-        logging.info("Function init of RelayNode class started")
         self.name = name
         self.port = port
-        self.storage = []
+        self.storage = {}
         self.neighbors = neighbors
         self.running = True
 
@@ -81,12 +80,15 @@ class RelayNode(threading.Thread):
         Args:
             message (dict): The message to be received and logged.
         """
-        logging.info("Function receive_message started")
-        logging.info(f"Message received and added to storage: {message}")
+        logging.info(f"Message received and added to storage with id : {message['id']}")
         log_event(self.name, "RECEIVE", message['data'])
-        if message not in self.storage:
-            self.storage.append(message)
-            log_event(self.name, "RECEIVE", " received message: '{message['data']}' with priority {message['priority']}")
+
+        message.setdefault('sender', None)  # Ensure 'sender' key is present
+        message.setdefault('id', str(uuid.uuid4()))  # Ensure 'id' key is present
+
+        if message['sender'] != self.name and message['id'] not in self.storage:  # Use message ID as the dictionary key
+            self.storage[message['id']] = message  # Store by ID
+            log_event(self.name, "RECEIVE", f" message: '{message['data']}' with priority {message['priority']}")
 
     def send_message(self, message, neighbor):
         """
@@ -96,7 +98,6 @@ class RelayNode(threading.Thread):
             message (SpaceRelayMessage): The message to send.
             neighbor (tuple): Tuple containing (hostname, port) of the destination node.
         """
-        logging.info("Function send_message started")
         logging.info(f"{self.name} is sending message to {neighbor}")
 
         try:
@@ -104,8 +105,16 @@ class RelayNode(threading.Thread):
                 s.connect(neighbor)
                 s.sendall(json.dumps(message.to_dict()).encode('utf-8'))
                 log_event(self.name, "SEND", f"sent message to {neighbor}")
+
+                # Create the stop flag after the first message is sent
+                if not os.path.exists("stop_flag"):
+                    open("stop_flag", "w").close()
+                    logging.info("Stop flag created, halting further messages.")
         except ConnectionRefusedError:
             log_event(self.name, "SEND", f"could not connect to {neighbor}")
+
+    import os
+    import time
 
     def forward_messages(self):
         """
@@ -113,35 +122,41 @@ class RelayNode(threading.Thread):
         - Messages are prioritized by urgency.
         - Implements intermittent connectivity with randomized success.
         """
-        logging.info("Function forward_messages started")
         logging.info(f"{self.name} storage contents: {self.storage}")
 
-        for message in self.storage:
-         # Convert dictionary-based message to SpaceRelayMessage object
-         new_message = SpaceRelayMessage(message['data'], message['priority'])
-        
-         if new_message.transmitted:
-             continue
-        
-         for neighbor in self.neighbors:
-             if random.choice([True, False]):  # Simulate intermittent connectivity
-                 self.send_message(new_message, neighbor)
-                 new_message.transmitted = True
-                 break
-             else:
-                 new_message.retries += 1
-                 
-                 log_event(self.name, "RETRY", new_message.data)
-                 
-                 if new_message.retries >= new_message.max_retries:
-                     log_event(self.name, "FORWARD", f" gave up on message '{new_message.data}' after {new_message.retries} attempts")
-                     break
+        # Stop forwarding if the stop_flag exists
+        if os.path.exists("stop_flag"):
+            logging.info(f"{self.name} stopping message forwarding due to stop flag.")
+            return  # Exit the function if the stop flag is set
+
+        for message in list(self.storage.values()):
+            sender = message.get('sender', self.name)
+            message_id = message.get('id', str(uuid.uuid4()))
+            new_message = SpaceRelayMessage(message['data'], message['priority'], sender=sender,
+                                            message_id=message_id)
+            if new_message.transmitted:
+                continue
+
+            for neighbor in self.neighbors:
+                # Skip forwarding to the original sender
+                if neighbor[0] != sender and random.choice([True, False]):
+                    self.send_message(new_message, neighbor)
+                    new_message.transmitted = True
+                    log_event(self.name, "FORWARD", f"sent message to {neighbor}")
+                    break
+                else:
+                    new_message.retries += 1
+                    log_event(self.name, "RETRY", new_message.data)
+                    if new_message.retries >= new_message.max_retries:
+                        log_event(self.name, "RETRY",
+                                  f"gave up on message '{new_message.data}' after {new_message.retries} attempts to {neighbor}")
+                        break
+            time.sleep(1)
 
     def run(self):
         """
         Main loop for node operation, forwarding messages periodically and listening for new messages.
         """
-        logging.info("Function run started")
         threading.Thread(target=self.server).start()
         while self.running:
             self.forward_messages()
@@ -151,7 +166,6 @@ class RelayNode(threading.Thread):
         """
         Starts a server socket to receive incoming messages from other nodes.
         """
-        logging.info("Function server started")
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
             server.bind(("0.0.0.0", self.port))
             server.listen()
@@ -165,7 +179,6 @@ class RelayNode(threading.Thread):
 
     def stop(self):
         """Stops the thread's main loop and ends the node's operations."""
-        logging.info("Function stop started")
         self.running = False
 
 # Instantiate and start the node
@@ -181,5 +194,10 @@ if __name__ == "__main__":
 
     node = RelayNode(node_name, node_port, neighbors)
     # Add a persistent test message
-    node.storage.append({"data": "Persistent test message", "priority": 1})
+    node.storage["test_message_id"] = {"data": "Persistent test message", "priority": 1}
     node.start()
+
+    # Run for 20 seconds then stop
+    time.sleep(20)
+    node.stop()
+    node.join()
