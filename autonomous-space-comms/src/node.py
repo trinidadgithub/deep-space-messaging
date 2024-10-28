@@ -4,6 +4,7 @@ import random
 import socket
 import json
 import logging
+import os
 
 # Configure centralized logging to capture all events in a shared log file
 logging.basicConfig(
@@ -36,6 +37,7 @@ class SpaceRelayMessage:
         max_retries (int): Maximum allowed retries before discarding the message.
     """
     def __init__(self, data, priority=1):
+        logging.info("Function init of SpaceRelayMessage started")
         self.data = data
         self.priority = priority
         self.transmitted = False
@@ -44,6 +46,7 @@ class SpaceRelayMessage:
 
     def to_dict(self):
         """Converts the message attributes to a dictionary for easy JSON serialization."""
+        logging.info("Function to_dict started")
         return {
             "data": self.data,
             "priority": self.priority,
@@ -64,6 +67,7 @@ class RelayNode(threading.Thread):
     """
     def __init__(self, name, port, neighbors):
         super().__init__()
+        logging.info("Function init of RelayNode class started")
         self.name = name
         self.port = port
         self.storage = []
@@ -77,10 +81,12 @@ class RelayNode(threading.Thread):
         Args:
             message (dict): The message to be received and logged.
         """
+        logging.info("Function receive_message started")
+        logging.info(f"Message received and added to storage: {message}")
         log_event(self.name, "RECEIVE", message['data'])
         if message not in self.storage:
             self.storage.append(message)
-            print(f"{self.name} received message: '{message['data']}' with priority {message['priority']}")
+            log_event(self.name, "RECEIVE", " received message: '{message['data']}' with priority {message['priority']}")
 
     def send_message(self, message, neighbor):
         """
@@ -90,14 +96,16 @@ class RelayNode(threading.Thread):
             message (SpaceRelayMessage): The message to send.
             neighbor (tuple): Tuple containing (hostname, port) of the destination node.
         """
+        logging.info("Function send_message started")
+        logging.info(f"{self.name} is sending message to {neighbor}")
+
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect(neighbor)
                 s.sendall(json.dumps(message.to_dict()).encode('utf-8'))
-                log_event(self.name, "SEND", message.data)
-                print(f"{self.name} sent message to {neighbor}")
+                log_event(self.name, "SEND", f"sent message to {neighbor}")
         except ConnectionRefusedError:
-            print(f"{self.name} could not connect to {neighbor}")
+            log_event(self.name, "SEND", f"could not connect to {neighbor}")
 
     def forward_messages(self):
         """
@@ -105,25 +113,35 @@ class RelayNode(threading.Thread):
         - Messages are prioritized by urgency.
         - Implements intermittent connectivity with randomized success.
         """
-        for message in sorted(self.storage, key=lambda x: x['priority'], reverse=True):
-            if message['transmitted']:
-                continue
-            for neighbor in self.neighbors:
-                if random.choice([True, False]):  # Simulates intermittent connectivity
-                    self.send_message(SpaceRelayMessage(**message), neighbor)
-                    message['transmitted'] = True
-                    break
-                else:
-                    message['retries'] += 1
-                    log_event(self.name, "RETRY", message['data'])
-                    if message['retries'] >= message['max_retries']:
-                        print(f"{self.name} gave up on message '{message['data']}' after {message['retries']} attempts")
-                        break
+        logging.info("Function forward_messages started")
+        logging.info(f"{self.name} storage contents: {self.storage}")
+
+        for message in self.storage:
+         # Convert dictionary-based message to SpaceRelayMessage object
+         new_message = SpaceRelayMessage(message['data'], message['priority'])
+        
+         if new_message.transmitted:
+             continue
+        
+         for neighbor in self.neighbors:
+             if random.choice([True, False]):  # Simulate intermittent connectivity
+                 self.send_message(new_message, neighbor)
+                 new_message.transmitted = True
+                 break
+             else:
+                 new_message.retries += 1
+                 
+                 log_event(self.name, "RETRY", new_message.data)
+                 
+                 if new_message.retries >= new_message.max_retries:
+                     log_event(self.name, "FORWARD", f" gave up on message '{new_message.data}' after {new_message.retries} attempts")
+                     break
 
     def run(self):
         """
         Main loop for node operation, forwarding messages periodically and listening for new messages.
         """
+        logging.info("Function run started")
         threading.Thread(target=self.server).start()
         while self.running:
             self.forward_messages()
@@ -133,6 +151,7 @@ class RelayNode(threading.Thread):
         """
         Starts a server socket to receive incoming messages from other nodes.
         """
+        logging.info("Function server started")
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
             server.bind(("0.0.0.0", self.port))
             server.listen()
@@ -146,16 +165,21 @@ class RelayNode(threading.Thread):
 
     def stop(self):
         """Stops the thread's main loop and ends the node's operations."""
+        logging.info("Function stop started")
         self.running = False
 
 # Instantiate and start the node
 if __name__ == "__main__":
-    node_name = "Node1"  # Should be set dynamically in each Docker container
-    node_port = 5000  # Unique for each node/container
-    neighbors = [("Node2", 5001), ("Node3", 5002)]  # Neighboring nodes with their ports
+    logging.info("Main program started")
+    node_name = os.getenv("NODE_NAME", "Node1")
+    node_port = int(os.getenv("NODE_PORT", 5000))
+    neighbors = [
+         (os.getenv("NEIGHBOR1_NAME", "Node2"), int(os.getenv("NEIGHBOR1_PORT", 5001))),
+         (os.getenv("NEIGHBOR2_NAME", "Node3"), int(os.getenv("NEIGHBOR2_PORT", 5002)))
+    ]
+
 
     node = RelayNode(node_name, node_port, neighbors)
+    # Add a persistent test message
+    node.storage.append({"data": "Persistent test message", "priority": 1})
     node.start()
-    time.sleep(20)
-    node.stop()
-    node.join()
